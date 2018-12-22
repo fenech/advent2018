@@ -1,39 +1,26 @@
 package main
 
 import (
+	"strings"
 	"testing"
 )
 
 func Test_pt1(t *testing.T) {
 	type args struct {
-		lines []int
+		lines string
 	}
 	tests := []struct {
 		name string
 		args args
 		want int
 	}{
-		{
-			"first",
-			args{[]int{1, 1, 1}},
-			3,
-		},
-		{
-			"second",
-			args{[]int{1, 1, -2}},
-			0,
-		},
-		{
-			"third",
-			args{[]int{-1, -2, -3}},
-			-6,
-		},
-
-		// TODO: Add test cases.
+		{"first", args{"+1\n+1\n+1\n"}, 3},
+		{"second", args{"+1\n+1\n-2\n"}, 0},
+		{"third", args{"-1\n-2\n-3\n"}, -6},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := pt1(tt.args.lines); got != tt.want {
+			if got := pt1(strings.NewReader(tt.args.lines)); got != tt.want {
 				t.Errorf("pt1() = %v, want %v", got, tt.want)
 			}
 		})
@@ -42,21 +29,21 @@ func Test_pt1(t *testing.T) {
 
 func Test_pt2(t *testing.T) {
 	type args struct {
-		lines []int
+		lines string
 	}
 	tests := []struct {
 		name string
 		args args
 		want int
 	}{
-		{"first", args{[]int{+1, -1}}, 0},
-		{"second", args{[]int{+3, +3, +4, -2, -4}}, 10},
-		{"second", args{[]int{-6, +3, +8, +5, -6}}, 5},
-		{"second", args{[]int{+7, +7, -2, -7, -4}}, 14},
+		{"first", args{"+1\n-1\n"}, 0},
+		{"second", args{"+3\n+3\n+4\n-2\n-4\n"}, 10},
+		{"third", args{"-6\n+3\n+8\n+5\n-6\n"}, 5},
+		{"fourth", args{"+7\n+7\n-2\n-7\n-4\n"}, 14},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := pt2(tt.args.lines); got != tt.want {
+			if got := pt2(strings.NewReader(tt.args.lines)); got != tt.want {
 				t.Errorf("pt2() = %v, want %v", got, tt.want)
 			}
 		})
