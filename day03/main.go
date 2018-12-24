@@ -92,6 +92,61 @@ func pt1(handle io.Reader) int {
 	return overlap
 }
 
+func pt2(handle io.Reader) int {
+	fabric := make([][][]int, 1000)
+	for i := range fabric {
+		fabric[i] = make([][]int, 1000)
+	}
+
+	scanner := bufio.NewScanner(handle)
+	ids := make(map[int]bool)
+	for scanner.Scan() {
+		claim := parse(scanner.Text())
+		ids[claim.id] = true
+		for j := 0; j < claim.size.h; j++ {
+			for i := 0; i < claim.size.w; i++ {
+				y := claim.start.y + j
+				x := claim.start.x + i
+
+				if y >= len(fabric) {
+					extra := make([][][]int, y-len(fabric)+1)
+					for i := range extra {
+						extra[i] = make([][]int, len(fabric[0]))
+					}
+					fabric = append(fabric, extra...)
+				}
+
+				if x >= len(fabric[0]) {
+					for i := range fabric {
+						extra := make([][]int, x-len(fabric[0])+1)
+						fabric[i] = append(fabric[i], extra...)
+					}
+				}
+
+				fabric[y][x] = append(fabric[y][x], claim.id)
+			}
+		}
+	}
+
+	for j := range fabric {
+		for i := range fabric[j] {
+			if len(fabric[j][i]) > 1 {
+				for _, id := range fabric[j][i] {
+					ids[id] = false
+				}
+			}
+		}
+	}
+
+	for id, flag := range ids {
+		if flag {
+			return id
+		}
+	}
+
+	return -1
+}
+
 func main() {
 	file, err := os.Open("input.txt")
 	if err != nil {
@@ -102,4 +157,6 @@ func main() {
 	fmt.Printf("part 1: %v\n", pt1(file))
 
 	file.Seek(0, 0)
+
+	fmt.Printf("part 2: %v\n", pt2(file))
 }

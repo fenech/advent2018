@@ -7,6 +7,8 @@ import (
 	"testing"
 )
 
+var example = strings.NewReader("#1 @ 1,3: 4x4\n#2 @ 3,1: 4x4\n#3 @ 5,5: 2x2\n")
+
 func Test_pt1(t *testing.T) {
 	type args struct {
 		handle io.Reader
@@ -18,7 +20,7 @@ func Test_pt1(t *testing.T) {
 	}{
 		{
 			"example",
-			args{strings.NewReader("#1 @ 1,3: 4x4\n#2 @ 3,1: 4x4\n#3 @ 5,5: 2x2\n")},
+			args{example},
 			4,
 		},
 	}
@@ -48,6 +50,30 @@ func Test_parse(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			if got := parse(tt.args.line); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("parse() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func Test_pt2(t *testing.T) {
+	type args struct {
+		handle io.Reader
+	}
+	tests := []struct {
+		name string
+		args args
+		want int
+	}{
+		{
+			"example",
+			args{example},
+			3,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := pt2(tt.args.handle); got != tt.want {
+				t.Errorf("pt2() = %v, want %v", got, tt.want)
 			}
 		})
 	}
