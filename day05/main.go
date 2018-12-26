@@ -37,7 +37,33 @@ func pt1(handle io.Reader) int {
 }
 
 func pt2(handle io.Reader) int {
-	return 0
+	scanner := bufio.NewScanner(handle)
+	scanner.Scan()
+	polymer := scanner.Text()
+
+	product := react(polymer)
+	units := make(map[rune]int)
+	for i := range product {
+		units[unicode.ToLower(rune(product[i]))] = 1
+	}
+
+	minLength := -1
+	for c := range units {
+		upperC := unicode.ToUpper(c)
+		copy := make([]byte, 0, len(product))
+		for i := range product {
+			if rune(product[i]) != c && rune(product[i]) != upperC {
+				copy = append(copy, product[i])
+			}
+		}
+
+		reactedProduct := react(string(copy))
+		if minLength == -1 || len(reactedProduct) < minLength {
+			minLength = len(reactedProduct)
+		}
+	}
+
+	return minLength
 }
 
 func main() {

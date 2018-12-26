@@ -73,3 +73,27 @@ func Test_pt1(t *testing.T) {
 		})
 	}
 }
+
+func Test_pt2(t *testing.T) {
+	type args struct {
+		handle io.Reader
+	}
+	tests := []struct {
+		name string
+		args args
+		want int
+	}{
+		{
+			"longer example",
+			args{strings.NewReader("dabAcCaCBAcCcaDA")},
+			4,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := pt2(tt.args.handle); got != tt.want {
+				t.Errorf("pt2() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
